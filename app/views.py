@@ -4,10 +4,10 @@ Jinja2 Documentation:    http://jinja.pocoo.org/2/documentation/
 Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
-
+import os
 from app import app
 from flask import render_template, request,jsonify
-from app.forms import UploadForm
+from .forms import UploadForm
 
 ###
 # Routing for your application.
@@ -29,20 +29,23 @@ def index(path):
     """
     return render_template('index.html')
 
-@app.rote("/api/upload",methods=["POST","GET"])
+@app.route("/api/upload",methods=["POST","GET"])
 def upload():
     form= UploadForm()
-    if request.method = "POST" and form.validate_on_submit():
+    if request.method == "POST" and form.validate_on_submit():
         photo= form.photo.data
         Description = form.Description.data
         filename= secure_filename(photo.filename)
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'],filename
         ))
-        return jsonify(data={"message":"File Upload Succesful"}, {"filename":filename},{"description":Description})
+        return jsonify(data=[{"message":"File Upload Succesful"},{"filename":filename},{"description":Description}])
     else:
+         #form.validate_on_submit() == False and request.method == "POST" :
         errors= form_errors(form)
         errors = {"errors":[errors]}
         return jsonify(errors)
+    
+        
 
 
 
