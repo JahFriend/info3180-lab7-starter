@@ -28,56 +28,42 @@ Vue.component('app-footer', {
     `
 });
 
-
 const uploadForm = Vue.component('upload-form',{
-template: `
-<form @submit.prevent="uploadPhoto enctype="multipart/form-data" id="uploadForm" >
-<div class= "form-group">        
-<label for="description"> Tell us about yourself </label>
-< textarea class= "form-control" name= "Description" rows="5"> </textarea>
-</div>
-
-<div class = "form-group">
-<label for= "photo"> Upload </label>
-<input type = "file" class ="form-control" name="photo"> Submit</button>
-
-</div>
-<button type = "submit" class= "btn btn-primary"> Submit</button>
-
-</form>
-
-`,
-methods:{
-    uploadPhoto: function(){
-        
-
-        fetch("/api/upload", {
-            method: 'POST'
-           })
-            .then(function (response) {
-            return response.json();
-            })
-            .then(function (jsonResponse) {
-            //display a success message
+    template:`
+      <form @submit.prevent="uploadPhoto" method = "post" enctype="multipart/form-data">
+        <div>
+          <label for="description">Description</label>
+          <br>
+          <textarea name="description" rows="4" cols="30"></textarea>
+        </div
+        <div>
+          <label for="photo">Photo</label>
+          <input type="file" name="photo">
+        </div>
+        <div>
+          <button type="submit" name="submit" class="btn btn-primary">Upload file</button>
+        </div>
+      </form>
+    `,
+      methods:{
+        uploadPhoto: function(){
+          fetch("api/upload",{
+            method:'POST'
+          })
+          .then(function(response){
+            return response.json(); 
+          })
+          .then(function(jsonResponse){
+            //display a success message 
             console.log(jsonResponse);
-            })
-            .catch(function (error) {
+          })
+          .catch(function(error){
             console.log(error);
-            });
+          });
+        } 
+      }
+  });
 
-
-
-    }
-
-
-
-
-
-
-
-}
-
-});
 
 const Home = Vue.component('home', {
    template: `

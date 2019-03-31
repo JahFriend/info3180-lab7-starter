@@ -29,7 +29,7 @@ def index(path):
     """
     return render_template('index.html')
 
-@app.route("/api/upload",methods=["POST","GET"])
+@app.route("/api/upload",methods=["POST"])
 def upload():
     form= UploadForm()
     if request.method == "POST" and form.validate_on_submit():
@@ -38,12 +38,15 @@ def upload():
         filename= secure_filename(photo.filename)
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'],filename
         ))
-        return jsonify(data=[{"message":"File Upload Succesful"},{"filename":filename},{"description":Description}])
+        flash("SUCESS")
+        return json.dumps({"message":"File Upload Successful"
+                                ,"filename":filename
+                                ,"description":description}) 
     else:
          #form.validate_on_submit() == False and request.method == "POST" :
         errors= form_errors(form)
-        errors = {"errors":[errors]}
-        return jsonify(errors)
+        error =   [{"Errors": errors }]
+        return jsonify(error = errors)
     
         
 
